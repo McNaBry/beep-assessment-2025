@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
-import Autocomplete, { Option } from './components/Autocomplete'
+import Autocomplete from './components/autocomplete/Autocomplete'
+import { Option } from './components/autocomplete/types';
 
 function App() {
   const [value, setValue] = useState<Option | null>(null);

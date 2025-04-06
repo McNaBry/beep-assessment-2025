@@ -13,10 +13,10 @@ import {
   useTransitionStyles
 } from "@floating-ui/react";
 import { JSX, useEffect, useRef, useState } from "react";
-import Spinner from "./Spinner";
-import { CrossFilled } from "./CrossFilled";
-
-export type Option = string | Object;
+import Spinner from "../Spinner";
+import { CrossFilled } from "../CrossFilled";
+import { Option } from "./types";
+import MultiOptionLabel from "./MultiOptionLabel";
 
 interface AutocompleteProps {
   description?: string;
@@ -206,29 +206,23 @@ export default function Autocomplete({
   return (
     <div className="w-full max-w-full flex flex-col items-start gap-1">
       { label && <label className="text-left text-gray-600" htmlFor="autocomplete">{ label }</label> }
-      <div className={
-        `min-w-[200px] w-full max-w-full flex gap-1 p-2 justify-between items-center
-        border border-gray-300 rounded-sm focus-within:border-blue-500 
-        ${disabled ? 'cursor-not-allowed bg-gray-100' : (loading ? 'cursor-progress' : "")}`
-      } ref={refs.setReference}>
+      <div 
+        className={
+          `min-w-[200px] w-full max-w-full flex gap-1 p-2 justify-between items-center
+          border border-gray-300 rounded-sm focus-within:border-blue-500 
+          ${disabled ? 'cursor-not-allowed bg-gray-100' : (loading ? 'cursor-progress' : "")}`} 
+        ref={refs.setReference}
+      >
         <div className="w-full flex flex-wrap gap-1 cursor-inherit">
           { multiple && (selected as Option[]).length > 0 &&
             <>
               { (selected as Option[]).map((selectedOption) => (
-                  <div 
-                    key={getStringValue(selectedOption)} 
-                    className="w-max flex gap-1 justify-between items-center bg-gray-300 text-gray-800 text-sm px-3 py-1 rounded-full"
-                  >
-                    <span>
-                      { getOptionLabel ? getOptionLabel(selectedOption) : getStringValue(selectedOption) }
-                    </span>
-                    <div 
-                      onClick={() => onSelectedChange(selectedOption)}
-                      className="cursor-pointer"
-                    >
-                      <CrossFilled height={16} width={16} className="hover:text-red-800" />
-                    </div>
-                  </div>
+                  <MultiOptionLabel 
+                    selectedOption={selectedOption}
+                    getStringValue={getStringValue}
+                    getOptionLabel={getOptionLabel}
+                    onSelectedChange={onSelectedChange}
+                  />
                 ))
               }
             </>
