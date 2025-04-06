@@ -9,7 +9,7 @@ function App() {
   const [customObjectValues, setCustomObjectValues] = useState<Option[]>([]);
   
   return (
-    <div className="justify-self-center flex flex-col gap-6 w-[300px]">
+    <div className="flex flex-col gap-6 w-[300px]">
       <Autocomplete 
         label='Single Select'
         description='Only one option can be selected'
