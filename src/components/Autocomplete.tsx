@@ -34,6 +34,7 @@ interface AutocompleteProps {
 
   // Additional props
   debounce?: number;
+  getOptionLabel?: (option: Option) => string;
 };
 
 export default function Autocomplete({
@@ -49,7 +50,8 @@ export default function Autocomplete({
   placeholder,
   renderOption,
   value,
-  debounce = 1000
+  debounce = 1000,
+  getOptionLabel
 }: AutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -203,19 +205,19 @@ export default function Autocomplete({
   
   return (
     <div className="w-full max-w-full flex flex-col items-start gap-1">
-      { label && <label className="text-gray-600" htmlFor="autocomplete">{ label }</label> }
+      { label && <label className="text-left text-gray-600" htmlFor="autocomplete">{ label }</label> }
       <div className={
         `min-w-[200px] w-full max-w-full flex gap-1 p-2 justify-between items-center
-        border border-gray-300 rounded-sm focus-within:border-blue-500
+        border border-gray-300 rounded-sm focus-within:border-blue-500 
         ${disabled ? 'cursor-not-allowed bg-gray-100' : (loading ? 'cursor-progress' : "")}`
       } ref={refs.setReference}>
         <div className="w-full flex flex-wrap gap-1 cursor-inherit">
           { multiple && (selected as Option[]).length > 0 &&
             <>
               { (selected as Option[]).map((selectedOption) => (
-                  <div className="w-max flex items-center bg-gray-300 text-gray-800 text-sm px-3 py-1 rounded-full">
+                  <div key={getStringValue(selectedOption)} className="w-max flex items-center bg-gray-300 text-gray-800 text-sm px-3 py-1 rounded-full">
                     <span>
-                      {getStringValue(selectedOption)}
+                      { getOptionLabel ? getOptionLabel(selectedOption) : getStringValue(selectedOption) }
                     </span>
                   </div>
                 ))
@@ -246,7 +248,7 @@ export default function Autocomplete({
             <FloatingFocusManager context={context} initialFocus={-1} modal={false}>
               <div
                 ref={refs.setFloating}
-                className="py-2 bg-white text-black overflow-y-auto rounded-sm"
+                className="py-2 bg-white text-black overflow-y-auto rounded-sm shadow-md shadow-[rgba(149,157,165,0.2)]"
                 style={{
                   ...floatingStyles,
                   ...styles,
@@ -280,10 +282,11 @@ export default function Autocomplete({
                                 `cursor-pointer flex items-center justify-between py-1 px-5
                                 ${(index === activeIndex ? 'bg-gray-200' : (isOptionSelected(option) ? 'bg-blue-100' : ''))}`
                               }>
-                                { getStringValue(option) }
+                                { getOptionLabel ? getOptionLabel(option) : getStringValue(option) }
                                 <input
                                   className="h-4 w-4 accent-[#2980b9]"
                                   type="checkbox"
+                                  readOnly
                                   checked={isOptionSelected(option)}
                                 />
                               </div>
@@ -316,7 +319,7 @@ export default function Autocomplete({
             : <></>
         }
       </div>
-      { description && <p className="text-gray-600">{ description }</p> }
+      { description && <p className="text-left text-gray-600">{ description }</p> }
     </div>
   );
 }

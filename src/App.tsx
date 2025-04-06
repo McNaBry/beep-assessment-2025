@@ -6,6 +6,7 @@ function App() {
   const [value, setValue] = useState<Option | null>(null);
   const [values, setValues] = useState<Option[]>([]);
   const [customOptionValues, setCustomOptionValues] = useState<Option[]>([]);
+  const [customObjectValues, setCustomObjectValues] = useState<Option[]>([]);
   
   return (
     <div className="justify-self-center flex flex-col gap-6 w-[300px]">
@@ -29,6 +30,42 @@ function App() {
         }}
         placeholder='Enter a value'
         options={["one", "one1", "one2", "two", "two2", "three", "four", "five", "six", "eight", "nine", "ten"]}
+      />
+
+      <Autocomplete 
+        label='Multi Select (with Objects)'
+        description='Date objects with custom comparator and label'
+        multiple={true}
+        value={customObjectValues}
+        onChange={(values) => {
+          const newValues = values as Option[] ?? [];
+          setCustomObjectValues(newValues);
+        }}
+        placeholder='Enter a value'
+        options={[
+          new Date('2025-04-01'),
+          new Date('2024-02-29'),
+          new Date('2025-10-31'),
+          new Date('2025-12-25'),
+          new Date('2025-07-04'),
+          new Date('2025-06-21'),
+          new Date('2025-11-05'),
+          new Date('2025-05-04'),
+          new Date('2025-09-13'),
+          new Date('2025-03-14'), 
+        ]}
+        filterOptions={(option, inputValue) => {
+          if (inputValue === "") {
+            return true;
+          }
+          const dateOption = option as Date;
+          const dateValue = `${dateOption.getDate()}/${dateOption.getMonth()}/${dateOption.getFullYear()}`
+          return dateValue.startsWith(inputValue);
+        }}
+        getOptionLabel={(option) => {
+          const dateOption = option as Date;
+          return `${dateOption.getDate()}/${dateOption.getMonth()}/${dateOption.getFullYear()}`
+        }}
       />
 
       <Autocomplete 
