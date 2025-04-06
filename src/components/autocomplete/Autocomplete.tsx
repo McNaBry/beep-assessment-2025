@@ -17,6 +17,7 @@ import Spinner from "../Spinner";
 import { CrossFilled } from "../CrossFilled";
 import { Option } from "./types";
 import MultiOptionLabel from "./MultiOptionLabel";
+import OptionItem from "./OptionItem";
 
 interface AutocompleteProps {
   description?: string;
@@ -281,18 +282,14 @@ export default function Autocomplete({
                         >
                           { renderOption
                             ? renderOption(option, index, index === activeIndex, isOptionSelected(option))
-                            : <div className={
-                                `cursor-pointer flex items-center justify-between py-1 px-5
-                                ${(index === activeIndex ? 'bg-gray-200' : (isOptionSelected(option) ? 'bg-blue-100' : ''))}`
-                              }>
-                                { getOptionLabel ? getOptionLabel(option) : getStringValue(option) }
-                                <input
-                                  className="h-4 w-4 accent-[#2980b9]"
-                                  type="checkbox"
-                                  readOnly
-                                  checked={isOptionSelected(option)}
-                                />
-                              </div>
+                            : <OptionItem 
+                                index={index}
+                                activeIndex={activeIndex}
+                                option={option}
+                                getStringValue={getStringValue}
+                                getOptionLabel={getOptionLabel}
+                                isOptionSelected={isOptionSelected}
+                              />
                           }
                         </div>
                       )
