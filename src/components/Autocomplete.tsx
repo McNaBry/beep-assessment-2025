@@ -303,11 +303,14 @@ export default function Autocomplete({
         { loading
           ? <Spinner /> 
           : !disabled && Array.isArray(selected) && (selected as Option[]).length > 0 || (!Array.isArray(selected) && selected != null)
-            ? <div onMouseDown={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                clearSelected();
-              }}>
+            ? <div 
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  clearSelected();
+                }}
+                className="p-1 cursor-pointer hover:bg-gray-200 rounded-full"
+              >
                 <CrossFilled />
               </div>
             : <></>
