@@ -31,6 +31,9 @@ interface AutocompleteProps {
   placeholder?: string;
   renderOption?: (option: Option, index: number, isActive: boolean, isSelected: boolean) => JSX.Element;
   value?: Option | Option[] | null;
+
+  // Additional props
+  debounce?: number;
 };
 
 export default function Autocomplete({
@@ -46,6 +49,7 @@ export default function Autocomplete({
   placeholder,
   renderOption,
   value,
+  debounce = 1000
 }: AutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -109,7 +113,7 @@ export default function Autocomplete({
           getStringValue(option).toLowerCase().startsWith(getStringValue(inputValue).toLowerCase()));
         setFilteredOptions(filtered);
       }
-    }, 1000)
+    }, debounce)
     
     return () => {
       clearTimeout(timeoutId);
